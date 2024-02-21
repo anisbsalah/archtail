@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
 LOGFILE='/tmp/install.log'
+# Remove old log file and start a new one
+[[ -f ${LOGFILE} ]] && rm "${LOGFILE}"
+when=$(date)
+printf "===   START INSTALLATION: %s   ===\n" "${when}" &>>"${LOGFILE}"
 
 ##################################################################
 ##################       GLOBAL VARIABLES       ##################
@@ -210,11 +214,6 @@ function welcome() {
 	of Arch Linux on your computer by selecting a group of tasks from a main menu."
 	whiptail --backtitle "${backmessage}" --title "Welcome" \
 		--msgbox "${message}" 10 63
-
-	# Remove old log files and start a new one
-	[[ -f ${LOGFILE} ]] && rm "${LOGFILE}"
-	when=$(date)
-	printf "===   START INSTALLATION: %s   ===\n" "${when}" &>>"${LOGFILE}"
 }
 
 # PRINT STEP
