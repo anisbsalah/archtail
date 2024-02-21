@@ -1716,7 +1716,7 @@ function quit_script() {
 backmessage='Arch Linux Installer via whiptail utility (ARCHTAIL)'
 welcome
 checkpath
-insall_prerequisites
+install_prerequisites
 check_reflector
 detect_timezone
 startmenu
