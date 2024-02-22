@@ -233,6 +233,7 @@ function install_prerequisites() {
 	sleep 3
 	sed -i 's/^[#[:space:]]*Color/Color\nILoveCandy/' /etc/pacman.conf
 	sed -i 's/^[#[:space:]]*ParallelDownloads.*/ParallelDownloads = 5/' /etc/pacman.conf
+	sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf
 	pacman -Sy --noconfirm --needed archlinux-keyring arch-install-scripts glibc reflector wget &>>"${LOGFILE}"
 }
 
@@ -556,12 +557,12 @@ function check_disk_selection() {
 # PARTITION THE SELECTED DISK
 function partition_disk() {
 	if ! efi_boot_mode; then
-		message="The system is booted in BIOS mode.\n"
+		message="The system is booted in BIOS mode.\n\n"
 		message+="Do you want to create a GPT or MBR partition table?"
 		if whiptail --backtitle "${backmessage}" --title "Partition Table" \
 			--yesno "${message}" \
 			--yes-button "GPT" \
-			--no-button "MBR" 7 0 3>&1 1>&2 2>&3; then
+			--no-button "MBR" 9 0 3>&1 1>&2 2>&3; then
 			DISKTABLE='GPT'
 		else
 			DISKTABLE='MBR'
@@ -1696,6 +1697,7 @@ function reboot_pc() {
 	TERM=ansi whiptail --backtitle "${backmessage}" --title "Reboot" \
 		--infobox "Rebooting in 1s..." 7 40
 	sleep 1
+	clear
 	reboot now
 
 }

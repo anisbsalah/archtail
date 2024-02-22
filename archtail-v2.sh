@@ -231,7 +231,8 @@ function install_prerequisites() {
 	print_step "Installing prerequisites"
 	sed -i 's/^[#[:space:]]*Color/Color\nILoveCandy/' /etc/pacman.conf
 	sed -i 's/^[#[:space:]]*ParallelDownloads.*/ParallelDownloads = 5/' /etc/pacman.conf
-	pacman -Sy --noconfirm --needed archlinux-keyring arch-install-scripts glibc wget
+	sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf
+	pacman -Sy --noconfirm --needed archlinux-keyring arch-install-scripts glibc reflector wget
 	pressanykey
 }
 
@@ -505,12 +506,12 @@ function check_disk_selection() {
 # PARTITION THE SELECTED DISK
 function partition_disk() {
 	if ! efi_boot_mode; then
-		message="The system is booted in BIOS mode.\n"
+		message="The system is booted in BIOS mode.\n\n"
 		message+="Do you want to create a GPT or MBR partition table?"
 		if whiptail --backtitle "${backmessage}" --title "Partition Table" \
 			--yesno "${message}" \
 			--yes-button "GPT" \
-			--no-button "MBR" 7 0 3>&1 1>&2 2>&3; then
+			--no-button "MBR" 9 0 3>&1 1>&2 2>&3; then
 			DISKTABLE='GPT'
 		else
 			DISKTABLE='MBR'
@@ -1132,10 +1133,6 @@ function enable_display_manager() {
 
 # ENABLE SERVICES
 function enable_services() {
-	TERM=ansi whiptail --backtitle "${backmessage}" --title "Services" \
-		--infobox "Enabling essential services..." 10 70
-	sleep 2
-
 	clear
 	print_step "Enabling essential services"
 
@@ -1205,9 +1202,6 @@ function execute_user() {
 
 # INSTALL GRUB BOOT LOADER
 function install_grub() {
-	TERM=ansi whiptail --backtitle "${backmessage}" --title "Boot loader" \
-		--infobox "Installing GRUB boot loader..." 10 70
-	sleep 2
 	clear
 	print_step "Installing GRUB boot loader"
 	arch-chroot /mnt pacman -S --noconfirm --needed grub os-prober
@@ -1634,6 +1628,7 @@ function reboot_pc() {
 	TERM=ansi whiptail --backtitle "${backmessage}" --title "Reboot" \
 		--infobox "Rebooting in 1s..." 7 40
 	sleep 1
+	clear
 	reboot now
 
 }
