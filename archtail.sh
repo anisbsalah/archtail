@@ -1704,7 +1704,6 @@ function reboot_pc() {
 function quit_script() {
 	if whiptail --backtitle "${backmessage}" --title "Exit" \
 		--defaultno --yesno "Are you sure you want to quit?" 7 0; then
-		umount -R /mnt
 		clear
 		exit 0
 	else
