@@ -1513,9 +1513,9 @@ function finish_installation() {
 	decrease_swappiness
 	xorg_keyboard_configuration
 	enable_services
+	print_step "End of installation" &>>"${LOGFILE}"
 	validate_pkgs
 	copy_log_files
-	print_step "End of installation" &>>"${LOGFILE}"
 	message="Arch Linux has been installed on your computer."
 	message+="\nYou may now restart into your new system, or continue using the live environment."
 	message+="\nMake sure to remove the installation media, so that you boot into the new system, rather than restarting the installation."
