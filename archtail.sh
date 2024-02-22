@@ -1279,7 +1279,7 @@ function gen_fstab() {
 
 	# Take a look at the new fstab file
 	whiptail --backtitle "${backmessage}" --title "Generated fstab" \
-		--textbox /mnt/etc/fstab --scrolltext 30 100
+		--textbox /mnt/etc/fstab --scrolltext 0 0
 }
 
 # FUNCTION TO EDIT THE FILE
