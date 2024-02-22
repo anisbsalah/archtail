@@ -1549,6 +1549,7 @@ function startmenu() {
 
 			"B")
 				install_base
+				pacman_configuration
 				install_essential_pkgs
 				check_tasks 6 && startmenu "O"
 				;;
@@ -1560,7 +1561,6 @@ function startmenu() {
 					timezone_setup &&
 					locale_setup &&
 					console_setup &&
-					pacman_configuration &&
 					mkinitcpio_conf &&
 					check_tasks 7 && startmenu "H"
 				;;

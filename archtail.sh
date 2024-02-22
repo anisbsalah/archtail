@@ -1588,7 +1588,7 @@ function startmenu() {
 				special_progress_gauge install_base "Installing the base system..."
 				whiptail --backtitle "${backmessage}" --title "Arch Linx Installation" \
 					--msgbox "Your base system has been installed.\nClick OK to continue." 10 70
-
+				pacman_configuration
 				print_step "Installing essential packages" &>>"${LOGFILE}"
 				special_progress_gauge install_essential_pkgs "Installing essential packages..."
 				TERM=ansi whiptail --backtitle "${backmessage}" --title "Software Installation" \
@@ -1607,7 +1607,6 @@ function startmenu() {
 					timezone_setup &&
 					locale_setup &&
 					console_setup &&
-					pacman_configuration &&
 					mkinitcpio_conf &&
 					check_tasks 7 && startmenu "H"
 				;;
