@@ -221,6 +221,7 @@ print_step() {
 
 # PRESS ANY KEY TO CONTINUE
 pressanykey() {
+	printf "\n"
 	read -n1 -p "Press any key to continue..."
 }
 
@@ -1547,16 +1548,8 @@ function startmenu() {
 			"D") diskmenu ;;
 
 			"B")
-				special_progress_gauge install_base "Installing the base system..."
-				whiptail --backtitle "${backmessage}" --title "Arch Linx Installation" \
-					--msgbox "Your base system has been installed.\nClick OK to continue." 10 70
-				whiptail --backtitle "${backmessage}" --title "Installation Progress" \
-					--textbox /tmp/install.log --scrolltext 30 90
-
-				special_progress_gauge install_essential_pkgs "Installing essential packages..."
-				TERM=ansi whiptail --backtitle "${backmessage}" --title "Software Installation" \
-					--infobox "Essential packages successfully installed..." 10 70
-				sleep 3
+				install_base
+				install_essential_pkgs
 				check_tasks 6 && startmenu "O"
 				;;
 
