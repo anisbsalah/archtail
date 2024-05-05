@@ -1161,7 +1161,6 @@ function enable_services() {
 			;;
 		esac
 	done
-
 	pressanykey
 }
 
