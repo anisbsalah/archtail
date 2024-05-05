@@ -1341,22 +1341,47 @@ function locale_setup() {
 	LOCALE=${LOCALE:="en_US.UTF-8"}
 	sleep 1
 	print_step "Localization" &>>"${LOGFILE}"
+
+	message="Setting locale to '${LOCALE}'...\n"
 	TERM=ansi whiptail --backtitle "${backmessage}" --title "System Configuration" \
-		--infobox "Setting Locale to '${LOCALE}'..." 10 70
-	sleep 2
+		--infobox "${message}" 10 70
+	sleep 1
 	sed -i "s/^[#[:space:]]*${LOCALE}/${LOCALE}/g" /mnt/etc/locale.gen
 	arch-chroot /mnt locale-gen &>>"${LOGFILE}"
+
+	message+="\nLANG=${LOCALE}"
+	TERM=ansi whiptail --backtitle "${backmessage}" --title "System Configuration" \
+		--infobox "${message}" 10 70
+	sleep 1
 	echo "LANG=${LOCALE}" | tee /mnt/etc/locale.conf &>>"${LOGFILE}"
+
+	message+="\nLC_TIME=C"
+	TERM=ansi whiptail --backtitle "${backmessage}" --title "System Configuration" \
+		--infobox "${message}" 10 70
+	sleep 2
+	echo "LC_TIME=C" | tee -a /mnt/etc/locale.conf &>>"${LOGFILE}"
+
 	export LANG="${LOCALE}"
 }
 
 # CONSOLE FONT & KEYMAP
 function console_setup() {
 	print_step "Console font & keymap" &>>"${LOGFILE}"
+	message="Setting the console font and keymap...\n"
 	TERM=ansi whiptail --backtitle "${backmessage}" --title "System Configuration" \
-		--infobox "Setting the console font and keymap..." 10 70
-	sleep 2
+		--infobox "${message}" 10 70
+	sleep 1
+
+	message+="\nKEYMAP=${KEYBOARD}"
+	TERM=ansi whiptail --backtitle "${backmessage}" --title "System Configuration" \
+		--infobox "${message}" 10 70
+	sleep 1
 	echo "KEYMAP=${KEYBOARD}" | tee /mnt/etc/vconsole.conf &>>"${LOGFILE}"
+
+	message+="\nFONT=ter-v18b"
+	TERM=ansi whiptail --backtitle "${backmessage}" --title "System Configuration" \
+		--infobox "${message}" 10 70
+	sleep 2
 	echo 'FONT=ter-v18b' | tee -a /mnt/etc/vconsole.conf &>>"${LOGFILE}"
 }
 

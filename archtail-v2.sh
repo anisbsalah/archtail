@@ -1291,21 +1291,46 @@ function timezone_setup() {
 function locale_setup() {
 	LOCALE=${LOCALE:="en_US.UTF-8"}
 	sleep 1
+
+	message="Setting locale to '${LOCALE}'...\n"
 	TERM=ansi whiptail --backtitle "${backmessage}" --title "System Configuration" \
-		--infobox "Setting Locale to '${LOCALE}'..." 10 70
-	sleep 2
+		--infobox "${message}" 10 70
+	sleep 1
 	sed -i "s/^[#[:space:]]*${LOCALE}/${LOCALE}/g" /mnt/etc/locale.gen
 	arch-chroot /mnt locale-gen &>/dev/null
+
+	message+="\nLANG=${LOCALE}"
+	TERM=ansi whiptail --backtitle "${backmessage}" --title "System Configuration" \
+		--infobox "${message}" 10 70
+	sleep 1
 	echo "LANG=${LOCALE}" | tee /mnt/etc/locale.conf &>/dev/null
+
+	message+="\nLC_TIME=C"
+	TERM=ansi whiptail --backtitle "${backmessage}" --title "System Configuration" \
+		--infobox "${message}" 10 70
+	sleep 2
+	echo "LC_TIME=C" | tee -a /mnt/etc/locale.conf &>/dev/null
+
 	export LANG="${LOCALE}"
 }
 
 # CONSOLE FONT & KEYMAP
 function console_setup() {
+	message="Setting the console font and keymap...\n"
 	TERM=ansi whiptail --backtitle "${backmessage}" --title "System Configuration" \
-		--infobox "Setting the console font and keymap..." 10 70
-	sleep 2
+		--infobox "${message}" 10 70
+	sleep 1
+
+	message+="\nKEYMAP=${KEYBOARD}"
+	TERM=ansi whiptail --backtitle "${backmessage}" --title "System Configuration" \
+		--infobox "${message}" 10 70
+	sleep 1
 	echo "KEYMAP=${KEYBOARD}" | tee /mnt/etc/vconsole.conf &>/dev/null
+
+	message+="\nFONT=ter-v18b"
+	TERM=ansi whiptail --backtitle "${backmessage}" --title "System Configuration" \
+		--infobox "${message}" 10 70
+	sleep 2
 	echo 'FONT=ter-v18b' | tee -a /mnt/etc/vconsole.conf &>/dev/null
 }
 
@@ -1438,7 +1463,6 @@ function decrease_swappiness() {
 	if [[ ${SWAP} == true || ${SWAPFILE} == true ]]; then
 		clear
 		print_step "Decreasing swappiness value"
-
 		echo "vm.swappiness=10" | tee -a /mnt/etc/sysctl.d/99-swappiness.conf
 
 		pressanykey
