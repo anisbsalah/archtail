@@ -211,7 +211,7 @@ function welcome() {
 }
 
 # PRINT STEP
-print_step() {
+function print_step() {
 	echo "
 ==========================================================================================
  $1
@@ -220,7 +220,7 @@ print_step() {
 }
 
 # PRESS ANY KEY TO CONTINUE
-pressanykey() {
+function pressanykey() {
 	printf "\n"
 	read -n1 -p "Press any key to continue..."
 }

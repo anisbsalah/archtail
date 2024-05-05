@@ -217,7 +217,7 @@ function welcome() {
 }
 
 # PRINT STEP
-print_step() {
+function print_step() {
 	echo "
 ==========================================================================================
  $1
