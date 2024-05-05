@@ -225,15 +225,22 @@ print_step() {
 "
 }
 
+# PACMAN CONFIGURATION
+function pacman_configuration() {
+	# Add color
+	sed -i 's/^[#[:space:]]*Color/Color\nILoveCandy/' /etc/pacman.conf
+	# Add parallel downloading
+	sed -i 's/^[#[:space:]]*ParallelDownloads.*/ParallelDownloads = 5/' /etc/pacman.conf
+	# Enable multilib
+	sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf
+}
+
 # INSTALL PREREQUISITES
 function install_prerequisites() {
 	print_step "Installing prerequisites" &>>"${LOGFILE}"
 	TERM=ansi whiptail --backtitle "${backmessage}" --title "Prerequisites" \
 		--infobox "Installing prerequisites..." 10 70
 	sleep 3
-	sed -i 's/^[#[:space:]]*Color/Color\nILoveCandy/' /etc/pacman.conf
-	sed -i 's/^[#[:space:]]*ParallelDownloads.*/ParallelDownloads = 5/' /etc/pacman.conf
-	sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf
 	pacman -Sy --noconfirm --needed archlinux-keyring arch-install-scripts glibc reflector wget &>>"${LOGFILE}"
 }
 
@@ -482,7 +489,7 @@ function validate_pkgs() {
 		for pkg_name in "${arr_name[@]}"; do
 			if ! pacman -Sp "${pkg_name}" &>/dev/null; then
 				#echo -e "\n'${pkg_name}' from '${pkg_arr}' had an error...\n" &>>"${MISSING_PKGS}"
-				printf "\n'%s' from '%s' had an error...\n" "${pkg_name}" "${pkg_arr}" &>>"${MISSING_PKGS}"
+				printf "\n'%s' from '%s' is missing...\n" "${pkg_name}" "${pkg_arr}" &>>"${MISSING_PKGS}"
 				missing_pkgs+=("${pkg_arr}::${pkg_name}")
 			fi
 		done
@@ -1353,8 +1360,8 @@ function console_setup() {
 	echo 'FONT=ter-v18b' | tee -a /mnt/etc/vconsole.conf &>>"${LOGFILE}"
 }
 
-# PACMAN CONFIGURATION
-function pacman_configuration() {
+# PACMAN CONFIGURATION ARCH CHROOT
+function pacman_configuration_chroot() {
 	print_step "pacman configuration" &>>"${LOGFILE}"
 	TERM=ansi whiptail --backtitle "${backmessage}" --title "System Configuration" \
 		--infobox "Configuring pacman..." 10 70
@@ -1516,7 +1523,6 @@ function finish_installation() {
 	xorg_keyboard_configuration
 	enable_services
 	print_step "End of installation" &>>"${LOGFILE}"
-	validate_pkgs
 	copy_log_files
 	message="Arch Linux has been installed on your computer."
 	message+="\nYou may now restart into your new system, or continue using the live environment."
@@ -1590,7 +1596,7 @@ function startmenu() {
 				special_progress_gauge install_base "Installing the base system..."
 				whiptail --backtitle "${backmessage}" --title "Arch Linx Installation" \
 					--msgbox "Your base system has been installed.\nClick OK to continue." 10 70
-				pacman_configuration
+				pacman_configuration_chroot
 				print_step "Installing essential packages" &>>"${LOGFILE}"
 				special_progress_gauge install_essential_pkgs "Installing essential packages..."
 				TERM=ansi whiptail --backtitle "${backmessage}" --title "Software Installation" \
@@ -1716,6 +1722,8 @@ function quit_script() {
 backmessage='Arch Linux Installer via whiptail utility (ARCHTAIL)'
 welcome
 checkpath
+pacman_configuration
+validate_pkgs
 install_prerequisites
 check_reflector
 detect_timezone

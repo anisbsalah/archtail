@@ -225,13 +225,20 @@ pressanykey() {
 	read -n1 -p "Press any key to continue..."
 }
 
+# PACMAN CONFIGURATION
+function pacman_configuration() {
+	# Add color
+	sed -i 's/^[#[:space:]]*Color/Color\nILoveCandy/' /etc/pacman.conf
+	# Add parallel downloading
+	sed -i 's/^[#[:space:]]*ParallelDownloads.*/ParallelDownloads = 5/' /etc/pacman.conf
+	# Enable multilib
+	sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf
+}
+
 # INSTALL PREREQUISITES
 function install_prerequisites() {
 	clear
 	print_step "Installing prerequisites"
-	sed -i 's/^[#[:space:]]*Color/Color\nILoveCandy/' /etc/pacman.conf
-	sed -i 's/^[#[:space:]]*ParallelDownloads.*/ParallelDownloads = 5/' /etc/pacman.conf
-	sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf
 	pacman -Sy --noconfirm --needed archlinux-keyring arch-install-scripts glibc reflector wget
 	pressanykey
 }
@@ -1302,8 +1309,8 @@ function console_setup() {
 	echo 'FONT=ter-v18b' | tee -a /mnt/etc/vconsole.conf &>/dev/null
 }
 
-# PACMAN CONFIGURATION
-function pacman_configuration() {
+# PACMAN CONFIGURATION ARCH CHROOT
+function pacman_configuration_chroot() {
 	clear
 	print_step "pacman configuration"
 
@@ -1473,7 +1480,6 @@ function finish_installation() {
 	enable_services
 	print_step "End of installation"
 	sleep 3
-	validate_pkgs
 	copy_log_files
 	message="Arch Linux has been installed on your computer."
 	message+="\nYou may now restart into your new system, or continue using the live environment."
@@ -1544,7 +1550,7 @@ function startmenu() {
 
 			"B")
 				install_base
-				pacman_configuration
+				pacman_configuration_chroot
 				install_essential_pkgs
 				check_tasks 6 && startmenu "O"
 				;;
@@ -1647,6 +1653,8 @@ function quit_script() {
 backmessage='Arch Linux Installer via whiptail utility (ARCHTAIL)'
 welcome
 checkpath
+pacman_configuration
+validate_pkgs
 install_prerequisites
 check_reflector
 detect_timezone
