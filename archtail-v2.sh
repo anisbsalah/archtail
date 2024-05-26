@@ -1501,6 +1501,7 @@ function finish_installation() {
 	decrease_swappiness
 	xorg_keyboard_configuration
 	enable_services
+	mkinitcpio_conf
 	print_step "End of installation"
 	sleep 3
 	copy_log_files
@@ -1585,7 +1586,6 @@ function startmenu() {
 					timezone_setup &&
 					locale_setup &&
 					console_setup &&
-					mkinitcpio_conf &&
 					check_tasks 7 && startmenu "H"
 				;;
 

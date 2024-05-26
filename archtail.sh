@@ -1547,6 +1547,7 @@ function finish_installation() {
 	decrease_swappiness
 	xorg_keyboard_configuration
 	enable_services
+	mkinitcpio_conf
 	print_step "End of installation" &>>"${LOGFILE}"
 	copy_log_files
 	message="Arch Linux has been installed on your computer."
@@ -1640,7 +1641,6 @@ function startmenu() {
 					timezone_setup &&
 					locale_setup &&
 					console_setup &&
-					mkinitcpio_conf &&
 					check_tasks 7 && startmenu "H"
 				;;
 
