@@ -830,9 +830,8 @@ function subvolumes_setup() {
 }
 
 function create_swap_file() {
-	print_step "Creating a swap file" &>>"${LOGFILE}"
-
 	if [[ ${SWAPFILE} == true ]]; then
+		print_step "Creating a swap file" &>>"${LOGFILE}"
 		if [[ ${FILESYSTEM} == btrfs ]]; then
 			{
 				btrfs filesystem mkswapfile --size "${SWAPFILE_SIZE}M" --uuid clear /mnt/swap/swapfile
