@@ -1748,8 +1748,8 @@ backmessage='Arch Linux Installer via whiptail utility (ARCHTAIL)'
 welcome
 pacman_configuration
 install_prerequisites
+check_reflector
 checkpath
 validate_pkgs
-check_reflector
 detect_timezone
 startmenu
