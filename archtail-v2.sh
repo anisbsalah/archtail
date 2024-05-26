@@ -164,7 +164,7 @@ pacman_pkgs=(alacritty arc-gtk-theme autoconf automake bash-completion
 	cronie dconf-editor dialog evince exa expac ffmpegthumbs htop icoutils
 	imagemagick kitty kvantum libreoffice-still libx11 libxft libxinerama
 	make meld nano nano-syntax-highlighting papirus-icon-theme pkgconf
-	qbittorrent ranger reflector rofi rsync shellcheck shfmt telegram-desktop
+	qbittorrent ranger reflector rofi rsync shellcheck shfmt starship telegram-desktop
 	vlc which xdg-desktop-portal xdg-user-dirs xdg-utils yad zenity
 	zsh zsh-autosuggestions zsh-syntax-highlighting)
 
