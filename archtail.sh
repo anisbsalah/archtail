@@ -1412,7 +1412,7 @@ function mkinitcpio_conf() {
 	fi
 	sed -i 's/^BINARIES=()/BINARIES=(setfont)/' /mnt/etc/mkinitcpio.conf
 	# sed -i 's/^\(HOOKS=["(]*base .*\) keymap consolefont \(.*\)$/\1 sd-vconsole \2/g' /mnt/etc/mkinitcpio.conf
-	sed -i '/^HOOKS=/s/autodetect\( \|$\)/autodetect microcode\1/g' /mnt/etc/mkinitcpio.conf
+	# sed -i '/^HOOKS=/s/autodetect\( \|$\)/autodetect microcode\1/g' /mnt/etc/mkinitcpio.conf
 	sed -i 's/^[#[:space:]]*COMPRESSION="zstd"/COMPRESSION="zstd"/' /mnt/etc/mkinitcpio.conf
 	arch-chroot /mnt mkinitcpio -P &>>"${LOGFILE}"
 	sleep 2
