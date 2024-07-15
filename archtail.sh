@@ -517,8 +517,11 @@ function checkpath() {
 	done
 	printf "%s\n" "${missing_ex[@]}" &>>"${MISSING_EX}"
 	printf "\n=== END MISSING EXECUTABLES ===\n" &>>"${MISSING_EX}"
-	whiptail --backtitle "${backmessage}" --title "Missing Executables" \
-		--textbox "${MISSING_EX}" --scrolltext 30 90
+
+	if [[ ! ${#missing_ex[@]} -eq 0 ]]; then
+		whiptail --backtitle "${backmessage}" --title "Missing Executables" \
+			--textbox "${MISSING_EX}" --scrolltext 30 90
+	fi
 }
 
 #################  DISK FUNCTIONS  ########################
