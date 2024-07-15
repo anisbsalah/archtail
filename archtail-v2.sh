@@ -1673,6 +1673,7 @@ function quit_script() {
 }
 
 backmessage='Arch Linux Installer via whiptail utility (ARCHTAIL)'
+setfont ter-v20b
 welcome
 pacman_configuration
 install_prerequisites
