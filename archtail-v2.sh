@@ -428,10 +428,12 @@ function validate_pkgs() {
 		--title "Missing Packages" --infobox "${message}" 8 0
 
 	# Initialize the package database
-	pacman -Sy &>>"${MISSING_PKGS}"
-	echo ""
+	{
+		pacman -Sy
+		echo ""
+	} &>>"${MISSING_PKGS}"
 
-	printf "=== MISSING PKGS (IF ANY) ===\n\n" &>>"${MISSING_PKGS}"
+	printf "=== MISSING PKGS (IF ANY) ===\n" &>>"${MISSING_PKGS}"
 	missing_pkgs=()
 	for pkg_arr in "${all_pkgs[@]}"; do
 		declare -n arr_name=${pkg_arr} # make a namespace for each pkg_array
@@ -446,8 +448,10 @@ function validate_pkgs() {
 	# printf "%s\n" "${missing_pkgs[@]}" &>>"${MISSING_PKGS}"
 	printf "\n===  END OF MISSING PKGS  ===\n" &>>"${MISSING_PKGS}"
 
-	whiptail --backtitle "${backmessage}" --title "Missing Packages" \
-		--textbox "${MISSING_PKGS}" --scrolltext 30 90
+	if [[ ! ${#missing_pkgs[@]} -eq 0 ]]; then
+		whiptail --backtitle "${backmessage}" --title "Missing Packages" \
+			--textbox "${MISSING_PKGS}" --scrolltext 30 90
+	fi
 }
 
 # CHECK THAT ALL EXECUTABLES ARE AVAILABLE FOR THIS SCRIPT
