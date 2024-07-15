@@ -478,12 +478,12 @@ function validate_pkgs() {
 	TERM=ansi whiptail --backtitle "${backmessage}" \
 		--title "Missing Packages" --infobox "${message}" 8 0
 
-	missing_pkgs=()
-	printf "=== MISSING PKGS (IF ANY) ===\n\n" &>>"${MISSING_PKGS}"
-
 	# Initialize the package database
 	pacman -Sy &>>"${MISSING_PKGS}"
+	echo ""
 
+	printf "=== MISSING PKGS (IF ANY) ===\n\n" &>>"${MISSING_PKGS}"
+	missing_pkgs=()
 	for pkg_arr in "${all_pkgs[@]}"; do
 		declare -n arr_name=${pkg_arr} # make a namespace for each pkg_array
 		for pkg_name in "${arr_name[@]}"; do
